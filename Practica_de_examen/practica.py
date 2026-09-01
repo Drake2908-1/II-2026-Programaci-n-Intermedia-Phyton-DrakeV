@@ -30,7 +30,15 @@ for estudiante_data in Estudiantes:
     print(f"\nDatos del estudiante {estudiante.nombre}:")
     estudiante.mostrar_datos()
 
-df = pd.DataFrame(Estudiantes)
+
+data = {
+    "nombre": ["Juan", "María", "Ana", "Luis", "Andrea"],
+    "edad": [20, 22, 19, 21, 23],
+    "estatura": [1.75, 1.65, 1.70, 1.80, 1.68],
+    "horas_estudio": [10, 8, 12, 15, 9],
+    "calificacion": [8.5, 9.0, 7.5, 9.5, 8.0]
+}
+
+df = pd.DataFrame(data)
 print(df)
-
-
+print(df.info())
