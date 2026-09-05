@@ -1,7 +1,19 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
+# ============================================================
+# Clase Estudiante
+# Representa a un estudiante y almacena sus datos.
+# ============================================================
 class Estudiante:
-    def __init__(self, nombre, edad, estatura, horas_estudio, calificacion):
+    def __init__(
+        self,
+        nombre: str,
+        edad: int,
+        estatura: float,
+        horas_estudio: int,
+        calificacion: float
+    ):
         self.nombre = nombre
         self.edad = edad
         self.estatura = estatura
@@ -9,36 +21,100 @@ class Estudiante:
         self.calificacion = calificacion
 
     def mostrar_datos(self):
+       # """Muestra en pantalla los datos del estudiante."""#
         print(f"Nombre: {self.nombre}")
         print(f"Edad: {self.edad}")
         print(f"Estatura: {self.estatura}")
         print(f"Horas de estudio: {self.horas_estudio}")
         print(f"Calificación: {self.calificacion}")
 
-lista_estudiantes = []
-Estudiantes = [
-    {"nombre": "Juan", "edad": 20, "estatura": 1.75, "horas_estudio": 10, "calificacion": 8.5},
-    {"nombre": "María", "edad": 22, "estatura": 1.65, "horas_estudio": 8, "calificacion": 9.0},
-    {"nombre": "Ana", "edad": 19, "estatura": 1.70, "horas_estudio": 12, "calificacion": 7.5},
-    {"nombre": "Luis", "edad": 21, "estatura": 1.80, "horas_estudio": 15, "calificacion": 9.5},
-    {"nombre": "Andrea", "edad": 23, "estatura": 1.68, "horas_estudio": 9, "calificacion": 8.0}
-]
 
-for estudiante_data in Estudiantes:
-    estudiante = Estudiante(**estudiante_data)
-    lista_estudiantes.append(estudiante)
-    print(f"\nDatos del estudiante {estudiante.nombre}:")
-    estudiante.mostrar_datos()
+# ============================================================
+# Crear una lista para almacenar los estudiantes
+# ============================================================
+estudiantes = []
 
 
-data = {
-    "nombre": ["Juan", "María", "Ana", "Luis", "Andrea"],
-    "edad": [20, 22, 19, 21, 23],
-    "estatura": [1.75, 1.65, 1.70, 1.80, 1.68],
-    "horas_estudio": [10, 8, 12, 15, 9],
-    "calificacion": [8.5, 9.0, 7.5, 9.5, 8.0]
-}
+# ============================================================
+# Solicitar los datos de 5 estudiantes
+# ============================================================
+for i in range(5):
+    print(f"\n--- Estudiante {i + 1} ---")
+    
+    estudiante = Estudiante(
+        input("Nombre: "),
+        int(input("Edad: ")),
+        float(input("Estatura: ")),
+        int(input("Horas de estudio: ")),
+        float(input("Calificación: "))
+    )
+    
+    estudiantes.append(estudiante)
 
-df = pd.DataFrame(data)
+
+# ============================================================
+# Convertir los objetos Estudiante en un DataFrame
+# ============================================================
+# __dict__ permite obtener los atributos del objeto
+# como un diccionario.
+datos = []
+
+for estudiante in estudiantes:
+    datos.append(estudiante.__dict__)
+
+df = pd.DataFrame(datos)
+
+
+# ============================================================
+# Mostrar los datos registrados
+# ============================================================
+print("\n========== DATOS DE LOS ESTUDIANTES ==========")
 print(df)
-print(df.info())
+
+
+# ============================================================
+# Calcular el promedio de las variables numéricas
+# ============================================================
+print("\n========== PROMEDIOS ==========")
+print(df.mean(numeric_only=True))
+
+
+# ============================================================
+# Encontrar el estudiante con la calificación más alta
+# ============================================================
+indice = df["calificacion"].idxmax()
+
+print("\n========== MEJOR CALIFICACIÓN ==========")
+print(f"Calificación máxima: {df['calificacion'].max()}")
+print("Datos del estudiante:")
+print(df.loc[indice])
+
+
+# ============================================================
+# Encontrar el estudiante con la calificación más baja
+# ============================================================
+indice = df["calificacion"].idxmin()
+
+print("\n========== MENOR CALIFICACIÓN ==========")
+print(f"Calificación mínima: {df['calificacion'].min()}")
+print("Datos del estudiante:")
+print(df.loc[indice])
+
+
+# ============================================================
+# Analizar la correlación entre las variables numéricas
+# ============================================================
+print("\n========== MATRIZ DE CORRELACIÓN ==========")
+print(df.corr(numeric_only=True))
+
+
+# ============================================================
+# Crear un gráfico de dispersión
+# Relaciona las horas de estudio con la calificación.
+# ============================================================
+df.plot(
+    kind="scatter",
+    x="horas_estudio",
+    y="calificacion"
+)
+plt.show()
